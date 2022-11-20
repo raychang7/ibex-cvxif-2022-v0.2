@@ -120,10 +120,6 @@ module ibex_simple_system (
   logic x_issue_req;
   logic x_issue_resp;
 
-  //Commit Interface
-  logic x_commit;
-  logic x_commit_valid;
-
   //Result Interface
   logic x_result_valid;
   logic result_ready;
@@ -283,8 +279,8 @@ module ibex_simple_system (
       .x_issue_ready_i        (x_issue_ready),   //need      //(1'b0),
       .x_issue_req_o          (x_issue_req),   //need
       .x_issue_resp_i         (x_issue_resp),   //need      //('0),
-      .x_commit_valid_o       (x_commit_valid),   //need
-      .x_commit_o             (x_commit),   //need
+      .x_commit_valid_o       (),  
+      .x_commit_o             (),   
       .x_mem_valid_i          (),     //(1'b0),
       .x_mem_ready_o          (),
       .x_mem_req_i            (),        //('0),
