@@ -51,7 +51,7 @@ module ibex_simple_system (
   parameter bit                 BranchPredictor          = 1'b0;
   parameter                     SRAMInitFile             = "";
   parameter bit                 XInterface               = 1'b1;
-  parameter bit                 MemInterface             = 1'b1;
+  parameter bit                 MemInterface             = 1'b0;
 
   logic clk_sys = 1'b0, rst_sys_n;
 
@@ -117,13 +117,13 @@ module ibex_simple_system (
   //Issue interface
   logic x_issue_valid;
   logic x_issue_ready;
-  logic x_issue_req;
-  logic x_issue_resp;
+  ibex_pkg::x_issue_req_t x_issue_req;
+  ibex_pkg::x_issue_resp_t x_issue_resp;
 
   //Result Interface
   logic x_result_valid;
-  logic result_ready;
-  logic result;
+  logic x_result_ready;
+  ibex_pkg::x_result_t x_result;
 
 
   assign instr_gnt = instr_req;
@@ -289,7 +289,7 @@ module ibex_simple_system (
       .x_mem_result_o         (),
       .x_result_valid_i       (x_result_valid),   //need        //(1'b0),
       .x_result_ready_o       (x_result_ready),   //need
-      .x_result_i             (x_result),   //need        //('0)
+      .x_result_i             (x_result)   //need        //('0)
     );
 
   // SRAM block for instruction and data storage
@@ -349,6 +349,18 @@ module ibex_simple_system (
       .timer_err_o    (device_err[Timer]),
       .timer_intr_o   (timer_irq)
     );
+
+    tinyfpu_cvxif fpu(
+      .clk_i                  (clk_sys),
+      .rst_ni                 (rst_sys_n),
+      .x_issue_valid_i        (x_issue_valid),
+      .x_issue_ready_o        (x_issue_ready),
+      .x_issue_req_i          (x_issue_req),
+      .x_issue_resp_o         (x_issue_resp),
+      .x_result_valid_o       (x_result_valid),
+      .x_result_ready_i       (x_result_ready),
+      .x_result_o             (x_result)
+      );
 
   export "DPI-C" function mhpmcounter_get;
 
