@@ -16,6 +16,11 @@ filesets:
       - lowrisc:ibex:ibex_icache
       - lowrisc:dv:dv_fcov_macros
     files:
+      - rtl/fpnew_pkg.sv
+      - rtl/cf_math_pkg.sv
+      - rtl/cb_filter_pkg.sv
+      - rtl/cdc_reset_ctrlr_pkg.sv
+      - rtl/ecc_pkg.sv
       - rtl/ibex_alu.sv
       - rtl/ibex_branch_predict.sv
       - rtl/ibex_compressed_decoder.sv
@@ -37,6 +42,86 @@ filesets:
       - rtl/ibex_dummy_instr.sv
       - rtl/ibex_core.sv
       - rtl/ibex_xif_issue_commit_buffer.sv
+      - rtl/tinyfpu_cvxif.sv
+      - rtl/addr_decode.sv
+      - rtl/addr_decode_napot.sv
+      - rtl/assertions.svh
+      - rtl/binary_to_gray.sv
+      - rtl/cb_filter.sv
+      - rtl/cc_onehot.sv
+      - rtl/cdc_2phase.sv
+      - rtl/cdc_4phase.sv
+      - rtl/cdc_fifo_2phase.sv
+      - rtl/cdc_reset_ctrlr.sv
+      - rtl/clk_int_div.sv
+      - rtl/counter.sv
+      - rtl/delta_counter.sv
+      - rtl/ecc_decode.sv
+      - rtl/ecc_encode.sv
+      - rtl/edge_detect.sv
+      - rtl/edge_propagator.sv
+      - rtl/edge_propagator_ack.sv
+      - rtl/edge_propagator_rx.sv
+      - rtl/edge_propagator_tx.sv
+      - rtl/exp_backoff.sv
+      - rtl/fall_through_register.sv
+      - rtl/fifo_v3.sv
+      - rtl/floatli_fma.sv
+      - rtl/floatli_fma_multi.sv
+      - rtl/floatli_top.sv
+      - rtl/fpnew_cast_multi.sv
+      - rtl/fpnew_classifier.sv
+      - rtl/fpnew_divsqrt_multi.sv
+      - rtl/fpnew_fma.sv
+      - rtl/fpnew_fma_multi.sv
+      - rtl/fpnew_noncomp.sv
+      - rtl/fpnew_opgroup_block.sv
+      - rtl/fpnew_opgroup_fmt_slice.sv
+      - rtl/fpnew_opgroup_multifmt_slice.sv
+      - rtl/fpnew_rounding.sv
+      - rtl/fpnew_top.sv
+      - rtl/gray_to_binary.sv
+      - rtl/id_queue.sv
+      - rtl/isochronous_4phase_handshake.sv
+      - rtl/isochronous_spill_register.sv
+      - rtl/lfsr.sv
+      - rtl/lfsr_8bit.sv
+      - rtl/lfsr_16bit.sv
+      - rtl/lzc.sv
+      - rtl/max_counter.sv
+      - rtl/mv_filter.sv
+      - rtl/onehot_to_bin.sv
+      - rtl/plru_tree.sv
+      - rtl/popcount.sv
+      - rtl/registers.svh
+      - rtl/rr_arb_tree.sv
+      - rtl/rstgen.sv
+      - rtl/rstgen_bypass.sv
+      - rtl/serial_deglitch.sv
+      - rtl/shift_reg.sv
+      - rtl/spill_register.sv
+      - rtl/spill_register_flushable.sv
+      - rtl/stream_arbiter.sv
+      - rtl/stream_arbiter_flushable.sv
+      - rtl/stream_delay.sv
+      - rtl/stream_demux.sv
+      - rtl/stream_fifo.sv
+      - rtl/stream_fifo_optimal_wrap.sv
+      - rtl/stream_filter.sv
+      - rtl/stream_fork.sv
+      - rtl/stream_fork_dynamic.sv
+      - rtl/stream_intf.sv
+      - rtl/stream_join.sv
+      - rtl/stream_mux.sv
+      - rtl/stream_omega_net.sv
+      - rtl/stream_register.sv
+      - rtl/stream_throttle.sv
+      - rtl/stream_to_mem.sv
+      - rtl/stream_xbar.sv
+      - rtl/sub_per_hash.sv
+      - rtl/sync.sv
+      - rtl/sync_wedge.sv
+      - rtl/unread.sv
       - rtl/ibex_pmp_reset_default.svh: {is_include_file: true}
     file_type: systemVerilogSource
 
@@ -146,7 +231,7 @@ parameters:
 
   XInterface:
     datatype: int
-    default: 0
+    default: 1
     paramtype: vlogparam
     description: "Enables the RISC-V Extension Interface (EXPERIMENTAL) [0/1]"
 
@@ -176,7 +261,11 @@ targets:
       verilator:
         mode: lint-only
         verilator_options:
-          - "-Wall"
+          - '-Wno-DECLFILENAME'
+          - '-Wno-LITENDIAN'
+          - '-Wno-WIDTH'
+          - '-Wno-UNSIGNED'
+          - '-Wno-UNOPTFLAT'
           # RAM primitives wider than 64bit (required for ECC) fail to build in
           # Verilator without increasing the unroll count (see Verilator#1266)
           - "--unroll-count 72"

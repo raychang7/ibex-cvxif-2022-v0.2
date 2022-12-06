@@ -9,6 +9,18 @@ int main(int argc, char **argv) {
   pcount_reset();
   pcount_enable(1);
 
+	__asm__ (
+	      	"li t0, 10	\n"
+	  	"li t1, 20	\n"
+		"add t2, t1, t0	\n"	
+		);
+
+	__asm__ (
+		"li t3, 0x7f7fffff	\n"
+		"li t4, 0xfdcccccc	\n"
+		".word 0x01ce8f53	\n"
+		);
+
   puts("Hello simple system\n");
   puthex(0xDEADBEEF);
   putchar('\n');
